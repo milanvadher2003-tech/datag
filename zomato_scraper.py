@@ -105,6 +105,7 @@ MIN_DELAY        = float(os.environ.get("MIN_DELAY", "0.8"))
 MAX_WORKERS      = int(os.environ.get("MAX_WORKERS", "6"))
 MAX_REVIEW_PAGES = int(os.environ.get("MAX_REVIEW_PAGES", "10"))
 MAX_SEARCH_PAGES = int(os.environ.get("MAX_PAGES", "20"))
+START_INDEX      = int(os.environ.get("START_INDEX", "0")) # 🔥 नया जोड़ा गया
 
 # ============================================================
 # HEADERS
@@ -421,12 +422,17 @@ if __name__ == "__main__":
         sys.exit(1)
     print(f"✅ {len(rests)} restaurants मिले\n")
 
+    # 🔥 नया बदलाव: 20-20 रेस्टोरेंट्स के हिसाब से डेटा काटो
+    END_INDEX = START_INDEX + 20
+    rests_to_process = rests[START_INDEX:END_INDEX]
+    print(f"🔄 इस रन में {len(rests_to_process)} रेस्टोरेंट्स प्रोसेस होंगे (इंडेक्स {START_INDEX} से {END_INDEX} तक)\n")
+
     all_overviews, all_reviews, all_menus, all_offers = [], [], [], []
     done = 0
-    total = len(rests)
+    total = len(rests_to_process)
 
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
-        futures = {pool.submit(process_one_restaurant, r): r for r in rests}
+        futures = {pool.submit(process_one_restaurant, r): r for r in rests_to_process}
         for fut in as_completed(futures):
             r = futures[fut]
             try:
