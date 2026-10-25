@@ -1,0 +1,5 @@
+zomato_data/
+*.xlsx
+__pycache__/
+*.pyc
+.env
