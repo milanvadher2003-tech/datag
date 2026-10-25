@@ -1,0 +1,49 @@
+name: Zomato Scraper
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_pages:
+        description: 'Search pages (default 20)'
+        required: false
+        default: '20'
+      max_review_pages:
+        description: 'Review pages per restaurant (default 10)'
+        required: false
+        default: '10'
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run scraper
+        env:
+          ZOMATO_CURL: ${{ secrets.ZOMATO_CURL }}
+          MAX_PAGES: ${{ github.event.inputs.max_pages || '20' }}
+          MAX_REVIEW_PAGES: ${{ github.event.inputs.max_review_pages || '10' }}
+        run: python zomato_scraper.py
+
+      - name: Upload Excel
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zomato-data-${{ github.run_number }}
+          path: zomato_data/*.xlsx
+          retention-days: 30
+          if-no-files-found: warn
