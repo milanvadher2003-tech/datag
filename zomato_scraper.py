@@ -101,8 +101,8 @@ OUT_DIR.mkdir(exist_ok=True)
 BASE = "https://www.zomato.com"
 
 # env से override हो सकते हैं
-MIN_DELAY        = float(os.environ.get("MIN_DELAY", "1"))
-MAX_WORKERS      = int(os.environ.get("MAX_WORKERS", "2"))
+MIN_DELAY        = float(os.environ.get("MIN_DELAY", "0.8"))
+MAX_WORKERS      = int(os.environ.get("MAX_WORKERS", "6"))
 MAX_REVIEW_PAGES = int(os.environ.get("MAX_REVIEW_PAGES", "10"))
 MAX_SEARCH_PAGES = int(os.environ.get("MAX_PAGES", "20"))
 
