@@ -1,9 +1,13 @@
 # zomato_scraper.py — GitHub Actions ready
 import os, json, time, sys, re
+import functools
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from curl_cffi import requests
 import pandas as pd
+
+# 🔥 यह लाइन जोड़ी है ताकि GitHub पर लॉग्स लाइव दिखें (Live Logs)
+print = functools.partial(print, flush=True)
 
 # ============================================================
 # cURL — GitHub Secret "ZOMATO_CURL" से आएगा
