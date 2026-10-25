@@ -11,6 +11,10 @@ on:
         description: 'Review pages per restaurant (default 10)'
         required: false
         default: '10'
+      start_index:
+        description: 'Start Index (0, 20, 40, 60...)'
+        required: false
+        default: '0'
 
 jobs:
   scrape:
@@ -37,6 +41,7 @@ jobs:
           ZOMATO_CURL: ${{ secrets.ZOMATO_CURL }}
           MAX_PAGES: ${{ github.event.inputs.max_pages || '20' }}
           MAX_REVIEW_PAGES: ${{ github.event.inputs.max_review_pages || '10' }}
+          START_INDEX: ${{ github.event.inputs.start_index || '0' }}
         run: python zomato_scraper.py
 
       - name: Upload Excel
